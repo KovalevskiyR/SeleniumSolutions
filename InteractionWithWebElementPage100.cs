@@ -26,7 +26,7 @@ namespace BrowserNavigationSolutionPage95
             IWebElement time_spent_results = driver.FindElement(By.TagName("nobr"));
             Console.WriteLine(time_spent_results.Text);
 
-            IWebElement second_header = driver.FindElement(By.XPath("//h3[(text()) = 'IT Craft.']"));
+            IWebElement second_header = driver.FindElement(By.XPath("//*[@id='rso']/div[2]//h3"));
             Console.WriteLine(second_header.Text);
             
             driver.Close();

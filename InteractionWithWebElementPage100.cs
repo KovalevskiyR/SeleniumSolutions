@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium;
 

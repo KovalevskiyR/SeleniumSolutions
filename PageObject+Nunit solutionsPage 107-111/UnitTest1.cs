@@ -22,15 +22,22 @@ namespace TestProject2
             TestContext.Progress.WriteLine("Test Started");
         }
 
+        [OneTimeTearDown]
+        public void TearDown()
+        {
+            driver.Quit();
+        }
+
         [Test]
         public void TestGoogleSearch()
         {
-            GooglePage page = new GooglePage(driver);           
-            page.goToGooglePage();
-            page.inputSearch("It Craft");
-            page.performSearch();
-            page.showSearchResult();
-            Assert.Greater(page.countResults(), page.preferableSearchCount, "Result count is more than 100");
+            GooglePage page = new GooglePage(driver);
+            page
+                .goToGooglePage()
+                .inputSearch("It Craft")
+                .performSearch()
+                .showSearchResult();
+            Assert.That(page.countResults(), Is.GreaterThan(page.preferableSearchCount), "Result count is more than 100");
         }
 
         [Test]
@@ -39,12 +46,6 @@ namespace TestProject2
             ItCraftPage page = new ItCraftPage(driver);
             page.goToItCraftPage();
             page.ScrollDown();
-        }
-
-        [OneTimeTearDown]
-        public void TearDown()
-        {
-            driver.Quit();
         }
     }
 }

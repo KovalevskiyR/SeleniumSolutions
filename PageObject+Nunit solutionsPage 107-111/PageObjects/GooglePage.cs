@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using NUnit.Framework;
 using OpenQA.Selenium;
 
@@ -20,25 +18,29 @@ namespace TestProject2.PageObjects
             this.driver = driver;         
         }
 
-        public void goToGooglePage()
+        public GooglePage goToGooglePage()
         {
             driver.Navigate().GoToUrl("https://google.com/");
+            return new GooglePage(driver);
         }
 
-        public void inputSearch(string text)
+        public GooglePage inputSearch(string text)
         {
             driver.FindElement(searchInput).SendKeys(text);
+            return new GooglePage(driver);
         }
 
-        public void performSearch()
+        public GooglePage performSearch()
         {
             driver.FindElement(searchInput).SendKeys(Keys.Enter);
+            return new GooglePage(driver);
         }
 
-        public void showSearchResult()
+        public GooglePage showSearchResult()
         {
             string text = driver.FindElement(searchResults).Text;
             TestContext.Progress.WriteLine(text);
+            return new GooglePage(driver);
         }
         public int countResults()
         {

@@ -17,6 +17,7 @@ namespace ApiAutotestPage130
             var content = response.Content;
             var users = JsonConvert.DeserializeObject<List<ListOfUsers>>(content).ToList();
             return users;
+
         }
     }
 }

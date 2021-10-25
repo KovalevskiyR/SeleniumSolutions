@@ -1,48 +1,51 @@
 using NUnit.Framework;
+using OpenQA.Selenium;
+using OpenQA.Selenium.Chrome;
+using TestProject2.PageObjects;
 
-
-
-namespace ApiAutotestPage130
+namespace TestProject2
 {
     public class Tests
     {
+        private IWebDriver driver;
+
+        [OneTimeSetUp]
+        public void Setup()
+        {
+            driver = new ChromeDriver(@"C:\QaLearning");
+            driver.Manage().Window.Maximize();
+        }
+
         [SetUp]
-        public void Indent()
+        public void StartTest()
         {
-            TestContext.Progress.WriteLine("-------------------------------");
+            TestContext.Progress.WriteLine("Test Started");
         }
-        
-        [Test]
-        public void Test1()
-        {
-            var usersList = new ApiUsers();
-            var response = usersList.GetUsers();
 
-            for (var i = 0; i < response.Count; i++)
-            {
-                Assert.That(response[i].Email, Is.Not.Null);
-                TestContext.Progress.WriteLine(response[i].Email);
-            }          
+        [OneTimeTearDown]
+        public void TearDown()
+        {
+            driver.Quit();
         }
 
         [Test]
-        public void Test2()
+        public void TestGoogleSearch()
         {
-            var usersList = new ApiUsers();
-            var response = usersList.GetUsers();
-           
-                Assert.Multiple(() =>
-               {
-                   Assert.AreEqual("Victor Plains", response[1].Address.Street);
-                   Assert.AreEqual("Suite 879", response[1].Address.Suite);
-                   Assert.AreEqual("Wisokyburgh", response[1].Address.City);
-                   Assert.AreEqual("90566-7771", response[1].Address.Zipcode);
-                   
-                   TestContext.Progress.WriteLine(response[1].Address.Street);
-                   TestContext.Progress.WriteLine(response[1].Address.Suite);
-                   TestContext.Progress.WriteLine(response[1].Address.City);
-                   TestContext.Progress.WriteLine(response[1].Address.Zipcode);
-               });
+            GooglePage page = new GooglePage(driver);
+            page
+                .goToGooglePage()
+                .inputSearch("It Craft")
+                .performSearch()
+                .showSearchResult();
+            Assert.That(page.countResults(), Is.GreaterThan(page.preferableSearchCount), "Result count is more than 100");
+        }
+
+        [Test]
+        public void TestScroll()
+        {
+            ItCraftPage page = new ItCraftPage(driver);
+            page.goToItCraftPage();
+            page.ScrollDown();
         }
     }
 }

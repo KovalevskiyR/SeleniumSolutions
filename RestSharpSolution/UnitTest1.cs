@@ -33,12 +33,6 @@ namespace ApiAutotestPage130
             var response = usersList.GetUsers();
            
             var findUserName = response.Where(u => u.Email.Contains("Shanna@melissa.tv"));
-
-            var street = findUserName.Where(s => s.Address.Street.Contains("Victor Plains"));
-            var suite = findUserName.Where(s => s.Address.Suite.Contains("Suite 879"));
-            var city = findUserName.Where(c => c.Address.City.Contains("Wisokyburgh"));
-            var zip = findUserName.Where(z => z.Address.Zipcode.Contains("90566-7771"));
-
             foreach (var user in findUserName)
             {
                 Assert.That(user.Address.Street, Is.EqualTo("Victor Plains"));

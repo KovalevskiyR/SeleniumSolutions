@@ -1,51 +1,56 @@
 using NUnit.Framework;
-using OpenQA.Selenium;
-using OpenQA.Selenium.Chrome;
-using TestProject2.PageObjects;
+using System.Linq;
 
-namespace TestProject2
+
+
+namespace ApiAutotestPage130
 {
     public class Tests
     {
-        private IWebDriver driver;
-
-        [OneTimeSetUp]
-        public void Setup()
-        {
-            driver = new ChromeDriver(@"C:\QaLearning");
-            driver.Manage().Window.Maximize();
-        }
-
         [SetUp]
-        public void StartTest()
+        public void Indent()
         {
-            TestContext.Progress.WriteLine("Test Started");
+            TestContext.Progress.WriteLine("-------------------------------");
         }
-
-        [OneTimeTearDown]
-        public void TearDown()
+        
+        [Test]
+        public void Test1()
         {
-            driver.Quit();
+            var usersList = new ApiUsers();
+            var response = usersList.GetUsers();
+
+            for (var i = 0; i < response.Count; i++)
+            {
+                Assert.That(response[i].Email, Is.Not.Null);
+                TestContext.Progress.WriteLine(response[i].Email);
+            }          
         }
 
         [Test]
-        public void TestGoogleSearch()
+        public void Test2()
         {
-            GooglePage page = new GooglePage(driver);
-            page
-                .goToGooglePage()
-                .inputSearch("It Craft")
-                .performSearch()
-                .showSearchResult();
-            Assert.That(page.countResults(), Is.GreaterThan(page.preferableSearchCount), "Result count is more than 100");
-        }
+            var usersList = new ApiUsers();
+            var response = usersList.GetUsers();
+           
+            var findUserName = response.Where(u => u.Email.Contains("Shanna@melissa.tv"));
 
-        [Test]
-        public void TestScroll()
-        {
-            ItCraftPage page = new ItCraftPage(driver);
-            page.goToItCraftPage();
-            page.ScrollDown();
+            var street = findUserName.Where(s => s.Address.Street.Contains("Victor Plains"));
+            var suite = findUserName.Where(s => s.Address.Suite.Contains("Suite 879"));
+            var city = findUserName.Where(c => c.Address.City.Contains("Wisokyburgh"));
+            var zip = findUserName.Where(z => z.Address.Zipcode.Contains("90566-7771"));
+
+            foreach (var user in findUserName)
+            {
+                Assert.That(user.Address.Street, Is.EqualTo("Victor Plains"));
+                Assert.That(user.Address.Suite, Is.EqualTo("Suite 879"));
+                Assert.That(user.Address.City, Is.EqualTo("Wisokyburgh"));
+                Assert.That(user.Address.Zipcode, Is.EqualTo("90566-7771"));
+
+                TestContext.Progress.WriteLine(user.Address.Street);
+                TestContext.Progress.WriteLine(user.Address.Suite);
+                TestContext.Progress.WriteLine(user.Address.City);
+                TestContext.Progress.WriteLine(user.Address.Zipcode);
+            }            
         }
     }
 }
